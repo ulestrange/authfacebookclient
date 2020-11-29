@@ -37,6 +37,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function authenticate() {
             const { accessToken } = body;
+            
 
             return from(new Promise(resolve => {
                 fetch(`https://graph.facebook.com/v8.0/me?access_token=${accessToken}`)

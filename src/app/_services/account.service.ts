@@ -7,7 +7,7 @@ import { map, concatMap, finalize } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Account } from '@app/_models';
 
-const baseUrl = `${environment.apiUrl}/accounts`;
+const baseUrl = `${environment.apiUrl}/users`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -50,8 +50,9 @@ export class AccountService {
     apiAuthenticate(accessToken: string) {
         // authenticate with the api using a facebook access token,
         // on success the api returns an account object with a JWT auth token
-        return this.http.post<any>(`${baseUrl}/authenticate`, { accessToken })
+        return this.http.post<any>(`{baseUrl}/auth/facebook`, { accessToken })
             .pipe(map(account => {
+               
                 this.accountSubject.next(account);
                 this.startAuthenticateTimer();
                 return account;
@@ -67,7 +68,7 @@ export class AccountService {
     }
 
     getAll() {
-        return this.http.get<Account[]>(baseUrl);
+        return this.http.get<Account[]>(`${baseUrl}`);
     }
 
     getById(id) {
@@ -101,16 +102,16 @@ export class AccountService {
     private authenticateTimeout;
 
     private startAuthenticateTimer() {
-        // parse json object from base64 encoded jwt token
-        const jwtToken = JSON.parse(atob(this.accountValue.token.split('.')[1]));
 
-        // set a timeout to re-authenticate with the api one minute before the token expires
-        const expires = new Date(jwtToken.exp * 1000);
-        const timeout = expires.getTime() - Date.now() - (60 * 1000);
-        const { accessToken } = FB.getAuthResponse();
-        this.authenticateTimeout = setTimeout(() => {
-            this.apiAuthenticate(accessToken).subscribe();
-        }, timeout);
+        // const jwtToken = JSON.parse(atob(this.accountValue.token.split('.')[1]));
+
+        // // set a timeout to re-authenticate with the api one minute before the token expires
+        // const expires = new Date(jwtToken.exp * 1000);
+        // const timeout = expires.getTime() - Date.now() - (60 * 1000);
+        // const { accessToken } = FB.getAuthResponse();
+        // this.authenticateTimeout = setTimeout(() => {
+        //     this.apiAuthenticate(accessToken).subscribe();
+        // }, timeout);
     }
 
     private stopAuthenticateTimer() {
