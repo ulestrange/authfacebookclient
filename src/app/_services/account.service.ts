@@ -50,7 +50,7 @@ export class AccountService {
     apiAuthenticate(accessToken: string) {
         // authenticate with the api using a facebook access token,
         // on success the api returns an account object with a JWT auth token
-        return this.http.post<any>(`{baseUrl}/auth/facebook`, { accessToken })
+        return this.http.post<any>(`https://localhost:8080/auth/facebook`, { accessToken })
             .pipe(map(account => {
                
                 this.accountSubject.next(account);
