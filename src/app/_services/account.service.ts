@@ -40,7 +40,8 @@ export class AccountService {
 
     facebookLogin() {
         // login with facebook and return observable with fb access token on success
-        return from(new Promise<fb.StatusResponse>(resolve => FB.login(resolve)))
+        return from(new Promise<fb.StatusResponse>(resolve => 
+            FB.login(resolve, {scope: 'email'})))
             .pipe(concatMap(({ authResponse }) => {
                 if (!authResponse) return EMPTY;
                 return of(authResponse.accessToken);
@@ -103,15 +104,15 @@ export class AccountService {
 
     private startAuthenticateTimer() {
 
-        // const jwtToken = JSON.parse(atob(this.accountValue.token.split('.')[1]));
+        const jwtToken = JSON.parse(atob(this.accountValue.token.split('.')[1]));
 
-        // // set a timeout to re-authenticate with the api one minute before the token expires
-        // const expires = new Date(jwtToken.exp * 1000);
-        // const timeout = expires.getTime() - Date.now() - (60 * 1000);
-        // const { accessToken } = FB.getAuthResponse();
-        // this.authenticateTimeout = setTimeout(() => {
-        //     this.apiAuthenticate(accessToken).subscribe();
-        // }, timeout);
+        // set a timeout to re-authenticate with the api one minute before the token expires
+        const expires = new Date(jwtToken.exp * 1000);
+        const timeout = expires.getTime() - Date.now() - (60 * 1000);
+        const { accessToken } = FB.getAuthResponse();
+        this.authenticateTimeout = setTimeout(() => {
+            this.apiAuthenticate(accessToken).subscribe();
+        }, timeout);
     }
 
     private stopAuthenticateTimer() {
