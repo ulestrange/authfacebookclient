@@ -24,7 +24,7 @@ export class EditAccountComponent implements OnInit {
     ngOnInit() {
         this.form = this.formBuilder.group({
             name: ['', Validators.required],
-            extraInfo: ['']
+            permissionLevel: ['']
         });
 
         // get account and populate form
@@ -50,7 +50,7 @@ export class EditAccountComponent implements OnInit {
 
         this.loading = true;
         this.error = '';
-        this.accountService.update(this.account.id, this.form.value)
+        this.accountService.update(this.account.userId, this.form.value)
             .pipe(first())
             .subscribe({
                 next: () => {

@@ -6,7 +6,7 @@
             <th>Id</th>
             <th>Facebook Id</th>
             <th>Name</th>
-            <th>Extra Info</th>
+            <th>PermissionLevel</th>
             <th></th>
         </tr>
     </thead>
@@ -15,7 +15,7 @@
             <td>{{account.id}}</td>
             <td>{{account.facebookId}}</td>
             <td>{{account.name}}</td>
-            <td>{{account.extraInfo}}</td>
+            <td>{{account.permissionLevel}}</td>
             <td class="text-right" style="white-space: nowrap">
                 <a routerLink="edit/{{account.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
                 <button (click)="deleteAccount(account.id)" class="btn btn-sm btn-danger btn-delete-account" [disabled]="account.isDeleting">

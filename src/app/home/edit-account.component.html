@@ -3,7 +3,7 @@
 <form *ngIf="account" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label>Facebook Id</label>
-        <div>{{account.facebookId}}</div>
+        <div>{{account.authId}}</div>
     </div>
     <div class="form-group">
         <label>Name</label>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label>Extra Info</label>
+        <label>Permission Level</label>
         <input type="text" formControlName="extraInfo" class="form-control" />
     </div>
     <div class="form-group">

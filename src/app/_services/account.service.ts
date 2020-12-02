@@ -51,9 +51,9 @@ export class AccountService {
     apiAuthenticate(accessToken: string) {
         // authenticate with the api using a facebook access token,
         // on success the api returns an account object with a JWT auth token
-        return this.http.post<any>(`https://localhost:8080/auth/facebook`, { accessToken })
+        return this.http.post<any>(`${environment.apiUrl}/auth/facebook`, { accessToken })
             .pipe(map(account => {
-               
+               console.log(account);
                 this.accountSubject.next(account);
                 this.startAuthenticateTimer();
                 return account;
@@ -80,7 +80,7 @@ export class AccountService {
         return this.http.put(`${baseUrl}/${id}`, params)
             .pipe(map((account: any) => {
                 // update the current account if it was updated
-                if (account.id === this.accountValue.id) {
+                if (account.id === this.accountValue.userId) {
                     // publish updated account to subscribers
                     account = { ...this.accountValue, ...account };
                     this.accountSubject.next(account);
@@ -93,7 +93,7 @@ export class AccountService {
         return this.http.delete(`${baseUrl}/${id}`)
             .pipe(finalize(() => {
                 // auto logout if the logged in account was deleted
-                if (id === this.accountValue.id)
+                if (id === this.accountValue.userId)
                     this.logout();
             }));
     }
@@ -104,11 +104,12 @@ export class AccountService {
 
     private startAuthenticateTimer() {
 
-        const jwtToken = JSON.parse(atob(this.accountValue.token.split('.')[1]));
+        const jwtToken = JSON.parse(atob(this.accountValue.appToken.split('.')[1]));
 
         // set a timeout to re-authenticate with the api one minute before the token expires
         const expires = new Date(jwtToken.exp * 1000);
         const timeout = expires.getTime() - Date.now() - (60 * 1000);
+        console.log('timeout is ' + timeout);
         const { accessToken } = FB.getAuthResponse();
         this.authenticateTimeout = setTimeout(() => {
             this.apiAuthenticate(accessToken).subscribe();

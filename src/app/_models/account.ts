@@ -1,7 +1,8 @@
 ﻿export class Account {
-    id: string;
-    facebookId: string;
-    name: string;
-    extraInfo: string;
-    token?: string;
+    userId: string;
+    authId?:string;
+    name?: string;
+    permissionLevel?: Number;
+    appToken?: string;
+    email?: string;    
 }

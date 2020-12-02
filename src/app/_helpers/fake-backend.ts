@@ -49,7 +49,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 if (!account) {
                     // create new account if first time logging in
                     account = {
-                        id: newAccountId(),
+                        id: data,
                         facebookId: data.id,
                         name: data.name,
                         extraInfo: `This is some extra info about ${data.name} that is saved in the API`
